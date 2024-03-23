@@ -1,11 +1,22 @@
 let express = require("express");
+let path = require("path");
 
 let app = express();
 
-app.get("/test",(req,resp)=>{
+// Define your '/test' route
+app.get("/test", (req, resp) => {
     resp.send(`<h1>Hello</h1>`);
 });
-app.use(express.static('chatbot'));
-app.listen(5050,()=>{
-    console.log("server runing http://localhost:5050")
+
+// Serve static files from the 'chatbot' directory
+app.use(express.static(path.join(__dirname, 'chatbot')));
+
+// Define a catch-all route to serve 'index.html' for all other routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'chatbot', 'index.html'));
+});
+
+// Start the server
+app.listen(5050, () => {
+    console.log("Server running at http://localhost:5050");
 });
